@@ -3,4 +3,5 @@ venv/
 __pycache__/
 *.pyc
 .env
+data/processed/interactions_cleaned.csv
 "@ | Out-File -Encoding utf8 .gitignore
