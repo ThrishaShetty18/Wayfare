@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wayfare — find where to go next</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap navbar">
+    <a href="#/" class="brand">
+      <svg class="brand-mark" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="13" cy="13" r="11.25" fill="var(--panel)" stroke="var(--teal-deep)" stroke-width="1.3"/>
+        <polygon points="13,4.5 16,13 13,13 10,13" fill="var(--coral)"/>
+        <polygon points="13,21.5 16,13 13,13 10,13" fill="var(--teal-deep)"/>
+        <circle cx="13" cy="13" r="1.4" fill="var(--panel)"/>
+      </svg>
+      <span class="brand-word">Wayfare</span>
+    </a>
+    <div class="apistatus" id="apiStatus">connecting…</div>
+  </div>
+</nav>
+
+<!-- ============ VIEW: HOME / SURVEY ============ -->
+<section id="view-home" class="view">
+
+  <div class="hero-blob blob-a" aria-hidden="true"></div>
+  <div class="hero-blob blob-b" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="hero-eyebrow">A hybrid neural + preference-matching engine, 1,486 destinations</div>
+        <h1>Tell it what a good trip<br>feels like to you.</h1>
+        <p class="hero-sub">Answer a few quick questions — including whether you want to stay
+          in India or go abroad. A network trained on real traveller preference data ranks
+          every destination for you, then works out roughly what the trip will cost, in
+          your currency.</p>
+        <button class="btn-primary" id="startBtn">Start the survey ✈</button>
+
+        <div class="hero-stats" id="heroStats">
+          <div class="stat"><div class="stat-num" data-target="1486" id="statDest">0</div><div class="stat-label">Destinations scored</div></div>
+          <div class="stat"><div class="stat-num" data-target="80301" id="statUsers">0</div><div class="stat-label">Traveller profiles learned from</div></div>
+          <div class="stat"><div class="stat-num" data-target="2" id="statSeconds">0</div><div class="stat-label">Seconds to rank them all</div></div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <svg class="flight-path" viewBox="0 0 300 220" aria-hidden="true">
+          <path id="flightCurve" d="M 24 172 C 90 60, 190 190, 268 46" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="1 9" stroke-linecap="round"/>
+          <circle cx="24" cy="172" r="5" fill="var(--coral)"/>
+          <circle cx="268" cy="46" r="5" fill="var(--teal)"/>
+          <g class="plane">
+            <text x="0" y="0" font-size="16" text-anchor="middle">✈</text>
+          </g>
+        </svg>
+        <div class="ticket">
+          <div class="ticket-row"><span>FROM</span><strong id="ticketFrom">Your answers</strong></div>
+          <div class="ticket-row"><span>TO</span><strong>Somewhere new</strong></div>
+          <div class="ticket-perf"></div>
+          <div class="ticket-row small"><span>MODEL</span><strong>MLP · dest. embeddings</strong></div>
+          <div class="ticket-row small"><span>MATCHING</span><strong>+ content overlap</strong></div>
+          <div class="ticket-row small"><span>SCOPE</span><strong>India or abroad</strong></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="surveyMain">
+    <div class="wizard" id="wizard">
+      <div class="empty">Loading survey questions…</div>
+    </div>
+  </main>
+
+</section>
+
+<!-- ============ VIEW: RESULTS DASHBOARD ============ -->
+<section id="view-results" class="view" hidden>
+  <header class="results-hero">
+    <div class="wrap">
+      <div class="hero-eyebrow">Your matches</div>
+      <h1 id="resultsHeading">Ranked for you</h1>
+      <p class="hero-sub">Tap any destination for photos, what it's known for, an
+        estimated budget, and a breakdown of exactly why it ranked where it did.
+        Match % is a blend of the trained network's score and how closely each
+        place's own traveller profile overlaps with what you picked — genuinely
+        higher when more of your answers line up, not a literal probability.</p>
+      <button class="btn-ghost" id="retakeBtn">Retake the survey</button>
+    </div>
+  </header>
+  <main class="wrap">
+    <div id="resultsGrid" class="results-grid"></div>
+  </main>
+</section>
+
+<!-- ============ VIEW: DESTINATION DETAIL ============ -->
+<section id="view-destination" class="view" hidden>
+  <main class="wrap dest-wrap">
+    <button class="btn-back" id="backBtn">← Back to your matches</button>
+    <div id="destContent"><div class="empty">Loading destination…</div></div>
+  </main>
+</section>
+
+<footer>
+  <div class="wrap">
+    Backend: Flask serving a from-scratch NumPy neural network, blended with a transparent
+    content-overlap match score. Frontend calls <code>/api/recommend</code>,
+    <code>/api/destination/&lt;id&gt;</code> and <code>/api/estimate</code>.
+    Photos via Wikipedia. Currency detection and FX conversion happen in your browser.
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
